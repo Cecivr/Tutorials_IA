@@ -6,13 +6,43 @@ public class Flock : MonoBehaviour
 {
     public FlockManager myManager;
     float speed;
+    bool turning = false;
     void Start()
     {
         speed = Random.Range(myManager.minSpeed, myManager.maxSpeed);
     }
     void Update()
     {
-        ApplyRules();
+        Bounds b = new Bounds(myManager.transform.position, myManager.swimLimits * 2);
+
+        if (!b.Contains(transform.position))
+        {
+            turning = true;
+        }
+        else
+        {
+            turning = false;
+        }
+        if (turning)
+        {
+            Vector3 direction = myManager.transform.position - transform.position;
+            transform.rotation = Quaternion.Slerp(transform.rotation,
+                                                    Quaternion.LookRotation(direction),
+                                                    myManager.rotationSpeed * Time.deltaTime);
+        }
+        else
+        {
+            if (Random.Range(0, 100) < 20)
+            {
+                speed = Random.Range(myManager.minSpeed, 
+                                     myManager.maxSpeed);
+            }
+            if (Random.Range(0, 100) < 20)
+            {
+                ApplyRules();
+            }
+        }
+
         transform.Translate(0, 0, Time.deltaTime * speed);
     }
     void ApplyRules()
@@ -50,7 +80,7 @@ public class Flock : MonoBehaviour
         }
         if(groupSize > 0)
 	    {
-            vcentre = vcentre / groupSize;
+            vcentre = vcentre / groupSize + (myManager.goalPos - this.transform.position);
             speed = globalSpeed / groupSize;
 
             Vector3 direction = (vcentre + vavoid) - transform.position;
