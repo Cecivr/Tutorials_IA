@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GoToHospital : GAction
+public class Rest : GAction
 {
     public override bool PrePerform()
     {
@@ -11,6 +11,7 @@ public class GoToHospital : GAction
 
     public override bool PostPerform()
     {
+        beliefs.RemoveState("exhausted");
         return true;
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GoToHospital : GAction
+public class GoHome : GAction
 {
     public override bool PrePerform()
     {
@@ -11,6 +11,7 @@ public class GoToHospital : GAction
 
     public override bool PostPerform()
     {
+        Destroy(this.gameObject, 2);
         return true;
     }
 }
